@@ -21,38 +21,43 @@ class Doctor:
 
     # Getters#
     def get_doctor_id(self):
-        return self._doctor_id
+        return self.doctor_id
 
     def get_name(self):
-        return self._name
+        return self.name
 
     def get_specialization(self):
-        return self._specialization
+        return self.specialization
 
     def get_working_time(self):
-        return self._working_time
+        return self.working_time
 
     def get_qualification(self):
-        return self._qualification
+        return self.qualification
 
     def get_room_number(self):
-        return self._room_number
+        return self.room_number
 
     # getters##
     def set_name(self, new_name):
-        self._name = new_name
+        self.new_name = new_name
+        self.name = self.new_name
 
     def set_specialization(self, new_specialization):
-        self._specialization = new_specialization
+        self.new_specialization = new_specialization
+        self.specialization = self.new_specialization
 
     def set_working_time(self, new_working_time):
-        self._working_time = new_working_time
+        self.new_working_time = new_working_time
+        self.working_time = new_working_time
 
     def set_qualification(self, new_qualification):
-        self._qualification = new_qualification
+        self.new_qualification = new_qualification
+        self.qualification = self.new_qualification
 
     def set_room_number(self, new_room_number):
-        self._room_number = new_room_number
+        self.new_room_number = new_room_number
+        self.room_number = self.new_room_number
 
 
 class DoctorManager:
@@ -65,7 +70,7 @@ class DoctorManager:
         return str(doctor)
 
     def enter_dr_info(self):
-        doctor_id = input("Enter the doctor's ID: ")
+        doctor_id = input("\nEnter the doctor's ID: ")
         name = input("Enter the doctor's Name: ")
         specialization = input("Enter the doctor's Specialization: ")
         working_time = input("Enter the doctor’s timing (e.g., 7am-10pm): ")
@@ -77,7 +82,7 @@ class DoctorManager:
 
     def read_doctors_file(self):
         self.doctors_list = []
-        with open("final cprg 216/doctors.txt", "r") as file:
+        with open("doctors.txt", "r") as file:
             lines = file.readlines()[1:]
             for line in lines:
                 doctor_info = line.strip().split("_")
@@ -102,28 +107,18 @@ class DoctorManager:
         print(doctor)
 
     def edit_doctor_info(self, doctor_id):
+        self.doctor_id = doctor_id
         found_doctor = self.search_doctor_by_id(doctor_id)
         if found_doctor:
-            print("Found doctor:")
-
-            self.display_doctor_info(found_doctor)
-
-            # Get new values for the doctor
-            new_name = input("Enter new Name: ")
-            new_specialization = input("Enter new Specialization: ")
-            new_working_time = input("Enter new Working Time: ")
-            new_qualification = input("Enter new Qualification: ")
-            new_room_number = input("Enter new Room Number: ")
-
             # Update doctor's information
-            found_doctor.set_name(new_name)
-            found_doctor.set_specialization(new_specialization)
-            found_doctor.set_working_time(new_working_time)
-            found_doctor.set_qualification(new_qualification)
-            found_doctor.set_room_number(new_room_number)
+            found_doctor.set_name(input("Enter new Name: "))
+            found_doctor.set_specialization(input("Enter new Specialization: "))
+            found_doctor.set_working_time(input("Enter new Working Time: "))
+            found_doctor.set_qualification(input("Enter new Qualification: "))
+            found_doctor.set_room_number(input("Enter new Room Number: "))
 
-            self.write_list_of_doctors_to_file()
-            print("Doctor information updated successfully.")
+            print(f"\nDoctor whose ID is {doctor_id} has been edited\n")
+
         else:
             print("Doctor not found.")
 
@@ -137,18 +132,16 @@ class DoctorManager:
             )
             for doctor in self.doctors_list:
                 print(str(doctor) + "\n")
-        else:
-            print("No doctors found.")
 
     def write_list_of_doctors_to_file(self):
-        with open("final cprg 216/doctors.txt", "w") as file:
+        with open("doctors.txt", "w") as file:
             for doctor in self.doctors_list:
                 file.write(self.format_dr_info(doctor) + "\n")
         print("List of doctors written to file successfully.")
 
     def add_doctor_to_file(self, doctor):
         self.doctors_list.append(doctor)
-        with open("final cprg 216/doctors.txt", "a") as file:
+        with open("doctors.txt", "a") as file:
             file.write(
                 f"\n{doctor.doctor_id}_{doctor.name.replace(' ', '_')}_{doctor.specialization}_{doctor.working_time.replace('-', '').lower()}_{doctor.qualification}_{doctor.room_number}\n"
             )
@@ -222,7 +215,7 @@ class PatientManager:
     def read_patients_file(self):
         self.patients_list = []
         try:
-            with open("final cprg 216/patients.txt", "r") as file:
+            with open("patients.txt", "r") as file:
                 lines = file.readlines()
                 for line in lines:
                     patient_info = line.strip().split("_")
@@ -279,14 +272,14 @@ class PatientManager:
             print("No patients found.")
 
     def write_list_of_patients_to_file(self):
-        with open("final cprg 216/patients.txt", "w") as file:
+        with open("patients.txt", "w") as file:
             for patient in self.patients_list:
                 file.write(self.format_patient_info_for_file(patient) + "\n")
             print("List of patients written to file successfully.")
 
     def add_patient_to_file(self, patient):
         self.patients_list.append(patient)
-        with open("final cprg 216/patients.txt", "a") as file:
+        with open("patients.txt", "a") as file:
             formatted_info = f"\n{patient.pid}_{patient.name.replace(' ', '_')}_{patient.disease}_{patient.gender}_{patient.age}\n"
             file.write(formatted_info)
         print(f"Patient with ID {patient.pid} has been added.")
@@ -318,7 +311,7 @@ class Management:
 
     def display_doctors_menu(self):
         while True:
-            print("Doctors Menu:")
+            print("\nDoctors Menu:")
             print("1 - Display Doctors list")
             print("2 - Search for doctor by ID")
             print("3 - Search for doctor by name")
@@ -345,11 +338,11 @@ class Management:
                         )
                         + "\n"
                     )
-                    print(str(found_doctor) + "\n")
+                    print(str(found_doctor))
                 else:
                     print("Can't find the doctor with the same ID on the system\n")
             elif doctors_selection == "3":
-                doctor_name = input("\n" + "Enter Doctor Name: ")
+                doctor_name = input("\nEnter Doctor Name: ")
                 found_doctors = self.doctor_manager.search_doctor_by_name(doctor_name)
                 if found_doctors:
                     print(
@@ -375,7 +368,7 @@ class Management:
 
             elif doctors_selection == "5":
                 doctor_id = input(
-                    "Please enter the id of the doctor that you want to edit their information: "
+                    "\nPlease enter the id of the doctor that you want to edit their information: "
                 )
                 found_doctor = self.doctor_manager.search_doctor_by_id(doctor_id)
                 if found_doctor:
@@ -383,10 +376,7 @@ class Management:
                 else:
                     print("Doctor not found.")
             elif doctors_selection == "6":
-                print("Returning to Main Menu.")
                 break
-            else:
-                print("Invalid choice. Please select a valid option.")
 
     def display_patients_menu(self):
         while True:
