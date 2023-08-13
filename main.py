@@ -1,5 +1,7 @@
 class Doctor:
-    def __init__(self, doctor_id, name, specialization, working_time, qualification, room_number):
+    def __init__(
+        self, doctor_id, name, specialization, working_time, qualification, room_number
+    ):
         self.doctor_id = doctor_id
         self.name = name
         self.specialization = specialization
@@ -14,10 +16,10 @@ class Doctor:
             self.specialization,
             self.working_time,
             self.qualification,
-            self.room_number
+            self.room_number,
         )
-    
-#Getters#
+
+    # Getters#
     def get_doctor_id(self):
         return self._doctor_id
 
@@ -36,7 +38,7 @@ class Doctor:
     def get_room_number(self):
         return self._room_number
 
-#getters##
+    # getters##
     def set_name(self, new_name):
         self._name = new_name
 
@@ -51,6 +53,7 @@ class Doctor:
 
     def set_room_number(self, new_room_number):
         self._room_number = new_room_number
+
 
 class DoctorManager:
     doctors_list = []
@@ -68,20 +71,19 @@ class DoctorManager:
         working_time = input("Enter the doctor’s timing (e.g., 7am-10pm): ")
         qualification = input("Enter the doctor’s qualification: ")
         room_number = input("Enter the doctor’s room number: ")
-        return Doctor(doctor_id, name, specialization, working_time, qualification, room_number)
+        return Doctor(
+            doctor_id, name, specialization, working_time, qualification, room_number
+        )
 
     def read_doctors_file(self):
         self.doctors_list = []
-        try:
-            with open("doctors.txt", "r") as file:
-                lines = file.readlines()
-                for line in lines:
-                    doctor_info = line.strip().split("_")
-                    if len(doctor_info) == 6:
-                        doctor = Doctor(*doctor_info)
-                        self.doctors_list.append(doctor)
-        except FileNotFoundError:
-            print("Doctors file not found. Creating an empty list.")
+        with open("final cprg 216/doctors.txt", "r") as file:
+            lines = file.readlines()[1:]
+            for line in lines:
+                doctor_info = line.strip().split("_")
+                if len(doctor_info) == 6:
+                    doctor = Doctor(*doctor_info)
+                    self.doctors_list.append(doctor)
 
     def search_doctor_by_id(self, doctor_id_search):
         for doctor in self.doctors_list:
@@ -99,13 +101,11 @@ class DoctorManager:
         print("Doctor Information:")
         print(doctor)
 
-
     def edit_doctor_info(self, doctor_id):
         found_doctor = self.search_doctor_by_id(doctor_id)
-        print(found_doctor)
         if found_doctor:
             print("Found doctor:")
-            
+
             self.display_doctor_info(found_doctor)
 
             # Get new values for the doctor
@@ -127,27 +127,33 @@ class DoctorManager:
         else:
             print("Doctor not found.")
 
-
     def display_doctors_list(self):
         if self.doctors_list:
-            print("List of Doctors:")
-            print("{:<5} {:<20} {:<15} {:<15} {:<15} {:<10}".format("Id", "Name", "Speciality", "Timing", "Qualification", "Room Number"))
+            print(
+                "{:<5} {:<20} {:<15} {:<15} {:<15} {:<10}".format(
+                    "Id", "Name", "Speciality", "Timing", "Qualification", "Room Number"
+                )
+                + "\n"
+            )
             for doctor in self.doctors_list:
-                print(doctor)
+                print(str(doctor) + "\n")
         else:
             print("No doctors found.")
 
     def write_list_of_doctors_to_file(self):
-        with open("doctors.txt", "w") as file:
+        with open("final cprg 216/doctors.txt", "w") as file:
             for doctor in self.doctors_list:
-                file.write(doctor.format_doctor_info_for_file() + "\n")
-            print("List of doctors written to file successfully.")
+                file.write(self.format_dr_info(doctor) + "\n")
+        print("List of doctors written to file successfully.")
 
     def add_doctor_to_file(self, doctor):
         self.doctors_list.append(doctor)
-        with open("doctors.txt", "a") as file:
-            file.write(f"\n{doctor.doctor_id}_{doctor.name.replace(' ', '_')}_{doctor.specialization}_{doctor.working_time.replace('-', '').lower()}_{doctor.qualification}_{doctor.room_number}\n")
-        print(f"Doctor whose ID is {doctor.doctor_id} has been added.")
+        with open("final cprg 216/doctors.txt", "a") as file:
+            file.write(
+                f"\n{doctor.doctor_id}_{doctor.name.replace(' ', '_')}_{doctor.specialization}_{doctor.working_time.replace('-', '').lower()}_{doctor.qualification}_{doctor.room_number}\n"
+            )
+        print(f"\nDoctor whose ID is {doctor.doctor_id} has been added\n")
+
 
 class Patient:
     def __init__(self, pid, name, disease, gender, age):
@@ -159,11 +165,7 @@ class Patient:
 
     def __str__(self):
         return "{:<5} {:<20} {:<15} {:<10} {:<5}".format(
-            self.pid,
-            self.name,
-            self.disease,
-            self.gender,
-            self.age
+            self.pid, self.name, self.disease, self.gender, self.age
         )
 
     def get_pid(self):
@@ -206,7 +208,7 @@ class PatientManager:
             patient.get_name(),
             patient.get_disease(),
             patient.get_gender(),
-            patient.get_age()
+            patient.get_age(),
         )
 
     def enter_patient_info(self):
@@ -220,7 +222,7 @@ class PatientManager:
     def read_patients_file(self):
         self.patients_list = []
         try:
-            with open("patients.txt", "r") as file:
+            with open("final cprg 216/patients.txt", "r") as file:
                 lines = file.readlines()
                 for line in lines:
                     patient_info = line.strip().split("_")
@@ -241,7 +243,7 @@ class PatientManager:
 
     def edit_patient_info(self, patient_id):
         found_patient = self.search_patient_by_id(patient_id)
-        
+
         if found_patient:
             print("Found patient:")
             self.display_patient_info(found_patient)
@@ -266,21 +268,25 @@ class PatientManager:
     def display_patients_list(self):
         if self.patients_list:
             print("List of Patients:")
-            print("{:<5} {:<20} {:<15} {:<10} {:<5}".format("ID", "Name", "Disease", "Gender", "Age"))
+            print(
+                "{:<5} {:<20} {:<15} {:<10} {:<5}".format(
+                    "ID", "Name", "Disease", "Gender", "Age"
+                )
+            )
             for patient in self.patients_list:
                 print(patient)
         else:
             print("No patients found.")
 
     def write_list_of_patients_to_file(self):
-        with open("patients.txt", "w") as file:
+        with open("final cprg 216/patients.txt", "w") as file:
             for patient in self.patients_list:
                 file.write(self.format_patient_info_for_file(patient) + "\n")
             print("List of patients written to file successfully.")
 
     def add_patient_to_file(self, patient):
         self.patients_list.append(patient)
-        with open("patients.txt", "a") as file:
+        with open("final cprg 216/patients.txt", "a") as file:
             formatted_info = f"\n{patient.pid}_{patient.name.replace(' ', '_')}_{patient.disease}_{patient.gender}_{patient.age}\n"
             file.write(formatted_info)
         print(f"Patient with ID {patient.pid} has been added.")
@@ -299,7 +305,7 @@ class Management:
             print("2 - Patients")
             print("3 - Exit")
             selection = input(">>> ")
-            
+
             if selection == "1":
                 self.display_doctors_menu()
             elif selection == "2":
@@ -309,7 +315,7 @@ class Management:
                 break
             else:
                 print("Invalid choice. Please select a valid option.")
-    
+
     def display_doctors_menu(self):
         while True:
             print("Doctors Menu:")
@@ -320,36 +326,60 @@ class Management:
             print("5 - Edit doctor info")
             print("6 - Back to Main Menu")
             doctors_selection = input(">>>")
-            
+
             if doctors_selection == "1":
                 self.doctor_manager.display_doctors_list()
             elif doctors_selection == "2":
-                doctor_id = input("Enter the doctor Id: ")
+                doctor_id = input("\nEnter the doctor Id:")
                 found_doctor = self.doctor_manager.search_doctor_by_id(doctor_id)
                 if found_doctor:
-                    print("{:<5} {:<20} {:<15} {:<15} {:<15} {:<10}".format("Id", "Name", "Speciality", "Timing", "Qualification", "Room Number"))
-                    print(found_doctor)
+                    print(
+                        "\n"
+                        + "{:<5} {:<20} {:<15} {:<15} {:<15} {:<10}".format(
+                            "Id",
+                            "Name",
+                            "Speciality",
+                            "Timing",
+                            "Qualification",
+                            "Room Number",
+                        )
+                        + "\n"
+                    )
+                    print(str(found_doctor) + "\n")
                 else:
-                    print("Can't find the doctor with the same ID.")
+                    print("Can't find the doctor with the same ID on the system\n")
             elif doctors_selection == "3":
-                doctor_name = input("Enter Doctor Name: ")
+                doctor_name = input("\n" + "Enter Doctor Name: ")
                 found_doctors = self.doctor_manager.search_doctor_by_name(doctor_name)
                 if found_doctors:
-                    print("{:<5} {:<20} {:<15} {:<15} {:<15} {:<10}".format("Id", "Name", "Speciality", "Timing", "Qualification", "Room Number"))
+                    print(
+                        "\n"
+                        + "{:<5} {:<20} {:<15} {:<15} {:<15} {:<10}".format(
+                            "Id",
+                            "Name",
+                            "Speciality",
+                            "Timing",
+                            "Qualification",
+                            "Room Number",
+                        )
+                        + "\n"
+                    )
                     for doctor in found_doctors:
-                        print(doctor)
+                        print(str(doctor) + "\n ")
                 else:
-                    print("Can't find the doctor with the same name.")
+                    print("Can't find the doctor with the same name on the system\n")
 
             elif doctors_selection == "4":
                 new_doctor = self.doctor_manager.enter_dr_info()
                 self.doctor_manager.add_doctor_to_file(new_doctor)
-                
+
             elif doctors_selection == "5":
-                doctor_id = input("Enter Doctor ID to edit: ")
+                doctor_id = input(
+                    "Please enter the id of the doctor that you want to edit their information: "
+                )
                 found_doctor = self.doctor_manager.search_doctor_by_id(doctor_id)
                 if found_doctor:
-                    self.doctor_manager.edit_doctor_info(found_doctor)
+                    self.doctor_manager.edit_doctor_info(doctor_id)
                 else:
                     print("Doctor not found.")
             elif doctors_selection == "6":
@@ -367,14 +397,18 @@ class Management:
             print("4 - Edit patient info")
             print("5 - Back to Main Menu")
             patients_selection = input(">>>")
-            
+
             if patients_selection == "1":
                 self.patient_manager.display_patients_list()
             elif patients_selection == "2":
                 pid = input("Enter Patient ID to search: ")
                 found_patient = self.patient_manager.search_patient_by_id(pid)
                 if found_patient:
-                    print("{:<5} {:<20} {:<15} {:<10} {:<5}".format("ID", "Name", "Disease", "Gender", "Age"))
+                    print(
+                        "{:<5} {:<20} {:<15} {:<10} {:<5}".format(
+                            "ID", "Name", "Disease", "Gender", "Age"
+                        )
+                    )
                     print(found_patient)
                 else:
                     print("Patient not found.")
@@ -395,6 +429,7 @@ class Management:
                 break
             else:
                 print("Invalid choice. Please select a valid option.")
+
 
 # Usage
 management_system = Management()
