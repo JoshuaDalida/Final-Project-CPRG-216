@@ -102,9 +102,10 @@ class DoctorManager:
         print(doctor)
 
     def write_list_of_doctors_to_file(self):
-        with open("doctors.txt", "w") as file:
-            for doctor in self.doctors_list:
-                file.write(self.format_dr_info(doctor) + "\n")
+            with open("doctors.txt", "w") as file:
+                for doctor in self.doctors_list:
+                    file.write(
+                        f"{doctor.doctor_id}_{doctor.name}_{doctor.specialization}_{doctor.working_time}_{doctor.qualification}_{doctor.room_number}\n")
 
     def edit_doctor_info(self, doctor_id):
         found_doctor = self.search_doctor_by_id(doctor_id)
@@ -112,7 +113,7 @@ class DoctorManager:
             # Update doctor's information
             found_doctor.set_name(input("Enter new Name: "))
             found_doctor.set_specialization(input("Enter new Specialization: "))
-            found_doctor.set_working_time(input("Enter new Working Time: "))
+            found_doctor.set_working_time(input("Enter new Timing: "))
             found_doctor.set_qualification(input("Enter new Qualification: "))
             found_doctor.set_room_number(input("Enter new Room Number: "))
 
@@ -228,7 +229,7 @@ class PatientManager:
     def write_list_of_patients_to_file(self):
         with open("patients.txt", "w") as file:
             for patient in self.patients_list:
-                file.write(self.format_patient_info_for_file(patient) + "\n")
+                file.write(f"{patient.pid} {patient.name}_{patient.disease}_{patient.gender}_{patient.age}\n")
 
     def edit_patient_info(self, patient_id):
         found_patient = self.search_patient_by_id(patient_id)
