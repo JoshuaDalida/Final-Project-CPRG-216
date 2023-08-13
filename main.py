@@ -117,7 +117,7 @@ class DoctorManager:
             found_doctor.set_qualification(input("Enter new Qualification: "))
             found_doctor.set_room_number(input("Enter new Room Number: "))
 
-            print(f"\nDoctor whose ID is {doctor_id} has been edited\n")
+            print(f"\nDoctor whose ID is {doctor_id} has been edited")
 
         else:
             print("Doctor not found.")
@@ -145,7 +145,7 @@ class DoctorManager:
             file.write(
                 f"\n{doctor.doctor_id}_{doctor.name.replace(' ', '_')}_{doctor.specialization}_{doctor.working_time.replace('-', '').lower()}_{doctor.qualification}_{doctor.room_number}\n"
             )
-        print(f"\nDoctor whose ID is {doctor.doctor_id} has been added\n")
+        print(f"\nDoctor whose ID is {doctor.doctor_id} has been added")
 
 
 class Patient:
@@ -205,7 +205,7 @@ class PatientManager:
         )
 
     def enter_patient_info(self):
-        pid = input("Enter Patient ID: ")
+        pid = input("\nEnter Patient id: ")
         name = input("Enter Name: ")
         disease = input("Enter Disease: ")
         gender = input("Enter Gender: ")
@@ -214,16 +214,13 @@ class PatientManager:
 
     def read_patients_file(self):
         self.patients_list = []
-        try:
-            with open("patients.txt", "r") as file:
-                lines = file.readlines()
-                for line in lines:
-                    patient_info = line.strip().split("_")
-                    if len(patient_info) == 5:
-                        patient = Patient(*patient_info)
-                        self.patients_list.append(patient)
-        except FileNotFoundError:
-            print("Patients file not found. Creating an empty list.")
+        with open("patients.txt", "r") as file:
+            lines = file.readlines()[1:]
+            for line in lines:
+                patient_info = line.strip().split("_")
+                if len(patient_info) == 5:
+                    patient = Patient(*patient_info)
+                    self.patients_list.append(patient)
 
     def search_patient_by_id(self, pid_search):
         for patient in self.patients_list:
@@ -260,16 +257,14 @@ class PatientManager:
 
     def display_patients_list(self):
         if self.patients_list:
-            print("List of Patients:")
             print(
                 "{:<5} {:<20} {:<15} {:<10} {:<5}".format(
                     "ID", "Name", "Disease", "Gender", "Age"
                 )
+                + "\n"
             )
             for patient in self.patients_list:
-                print(patient)
-        else:
-            print("No patients found.")
+                print(str(patient) + "\n")
 
     def write_list_of_patients_to_file(self):
         with open("patients.txt", "w") as file:
@@ -282,7 +277,7 @@ class PatientManager:
         with open("patients.txt", "a") as file:
             formatted_info = f"\n{patient.pid}_{patient.name.replace(' ', '_')}_{patient.disease}_{patient.gender}_{patient.age}\n"
             file.write(formatted_info)
-        print(f"Patient with ID {patient.pid} has been added.")
+        print(f"\nPatient whose ID  is {patient.pid} has been added.")
 
 
 class Management:
@@ -291,8 +286,8 @@ class Management:
         self.patient_manager = PatientManager()
 
     def display_menu(self):
-        print("Welcome to Alberta Hospital (AH) Managment system")
         while True:
+            print("Welcome to Alberta Hospital (AH) Managment system")
             print("Select from the following options:")
             print("1 - Doctors")
             print("2 - Patients")
@@ -340,7 +335,7 @@ class Management:
                     )
                     print(str(found_doctor))
                 else:
-                    print("Can't find the doctor with the same ID on the system\n")
+                    print("Can't find the doctor with the same ID on the system")
             elif doctors_selection == "3":
                 doctor_name = input("\nEnter Doctor Name: ")
                 found_doctors = self.doctor_manager.search_doctor_by_name(doctor_name)
@@ -358,9 +353,9 @@ class Management:
                         + "\n"
                     )
                     for doctor in found_doctors:
-                        print(str(doctor) + "\n ")
+                        print(str(doctor))
                 else:
-                    print("Can't find the doctor with the same name on the system\n")
+                    print("Can't find the doctor with the same name on the system")
 
             elif doctors_selection == "4":
                 new_doctor = self.doctor_manager.enter_dr_info()
@@ -380,8 +375,8 @@ class Management:
 
     def display_patients_menu(self):
         while True:
-            print("Select from the following options:")
-            print("1 - Display Patients list")
+            print("\nPatients Menu:")
+            print("1 - Display patients list")
             print("2 - Search for patient by ID")
             print("3 - Add patient")
             print("4 - Edit patient info")
@@ -391,27 +386,29 @@ class Management:
             if patients_selection == "1":
                 self.patient_manager.display_patients_list()
             elif patients_selection == "2":
-                pid = input("Enter Patient ID to search: ")
+                pid = input("\nEnter Patient ID: ")
                 found_patient = self.patient_manager.search_patient_by_id(pid)
                 if found_patient:
                     print(
-                        "{:<5} {:<20} {:<15} {:<10} {:<5}".format(
+                        "\n"
+                        + "{:<5} {:<20} {:<15} {:<10} {:<5}".format(
                             "ID", "Name", "Disease", "Gender", "Age"
                         )
+                        + "\n"
                     )
-                    print(found_patient)
+                    print(str(found_patient) + "\n")
                 else:
-                    print("Patient not found.")
+                    print("Can't find the Patient with the same id on the system")
             elif patients_selection == "3":
                 new_patient = self.patient_manager.enter_patient_info()
                 self.patient_manager.add_patient_to_file(new_patient)
-                print("Patient added successfully.")
             elif patients_selection == "4":
-                pid = input("Enter Patient ID to edit: ")
+                pid = input(
+                    "\nPlease enter the id of the Patient that you want to edit their information: "
+                )
                 found_patient = self.patient_manager.search_patient_by_id(pid)
                 if found_patient:
                     self.patient_manager.edit_patient_info(found_patient)
-                    print("Patient information updated successfully.")
                 else:
                     print("Patient not found.")
             elif patients_selection == "5":
